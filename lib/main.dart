@@ -14,6 +14,8 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+
+  String input="";
   List list = List();
   
   void initState(){
@@ -33,14 +35,38 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: (){
-
+            showDialog(
+                context: context,
+              builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Add ToDo"),
+                    content: TextField(
+                      onChanged: (String value){
+                          input = value;
+                      },
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                          onPressed: (){
+                            setState(() {
+                              list.add(input);
+                            });
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Add")
+                      )
+                    ],
+                  );
+              }
+            );
           },
       ),
       body:ListView.builder(
           itemCount: list.length,
           itemBuilder: (BuildContext context, int index){
             return Dismissible(
-                key: Key(index.toString()),
+                //key: Key(index.toString()),
+                key: UniqueKey(),
                 child: ListTile(
                   title: Text(list[index])
                 ));
